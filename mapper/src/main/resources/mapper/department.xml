@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zsz.learnmybatis.mapper.mapper.DepartmentMapper">
+
+  <resultMap id="department" type="org.zsz.learnmybatis.mapper.entity.Department">
+    <id property="id" column="id"/>
+    <id property="name" column="name"/>
+    <id property="tel" column="tel"/>
+    <collection property="users" ofType="org.zsz.learnmybatis.mapper.entity.User"
+      select="org.zsz.learnmybatis.mapper.mapper.UserMapper.findAllByDepartmentId" column="id"/>
+  </resultMap>
+
+
+  <resultMap id="departmentWithConstructor" type="org.zsz.learnmybatis.mapper.entity.Department">
+    <constructor>
+      <idArg column="id" javaType="String"/>
+    </constructor>
+    <result property="name" column="name"/>
+    <result property="tel" column="tel"/>
+  </resultMap>
+
+  <select id="findAll" resultMap="departmentWithConstructor">
+    SELECT *
+    FROM tbl_department
+  </select>
+
+  <select id="findById" parameterType="string" resultMap="department">
+    SELECT *
+    FROM tbl_department
+    WHERE id = #{id}
+  </select>
+
+  <insert id="insert" parameterType="org.zsz.learnmybatis.mapper.entity.Department">
+    INSERT INTO tbl_department (id, name, tel)
+    VALUES (#{id}, #{name}, #{tel})
+  </insert>
+
+  <update id="update" parameterType="org.zsz.learnmybatis.mapper.entity.Department">
+    UPDATE tbl_department
+    SET name = #{name},
+        tel  = #{tel}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteById" parameterType="string">
+    DELETE
+    FROM tbl_department
+    WHERE id = #{id}
+  </delete>
+
+</mapper>

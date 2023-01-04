@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zsz.learnmybatis.basic.mapper.UserMapper">
+  <resultMap id="user" type="org.zsz.learnmybatis.basic.entity.User">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="age" column="age"/>
+    <result property="birthday" column="birthday"/>
+    <association property="department" javaType="org.zsz.learnmybatis.basic.entity.Department">
+      <id property="id" column="department_id"/>
+      <result property="name" column="department_name"/>
+    </association>
+  </resultMap>
+
+  <resultMap id="userlazy" type="org.zsz.learnmybatis.basic.entity.User">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="age" column="age"/>
+    <result property="birthday" column="birthday"/>
+    <association property="department" javaType="org.zsz.learnmybatis.basic.entity.Department"
+      select="org.zsz.learnmybatis.basic.mapper.DepartmentMapper.findById" column="department_id"/>
+  </resultMap>
+
+  <select id="findAll" resultMap="user">
+    SELECT usr.*, dep.name AS department_name
+    FROM tbl_user usr
+           LEFT JOIN tbl_department dep ON usr.department_id = dep.id
+  </select>
+
+  <select id="findAllLazy" resultMap="userlazy">
+    SELECT *
+    FROM tbl_user
+  </select>
+
+  <select id="findAllByDepartmentId" parameterType="string" resultType="org.zsz.learnmybatis.basic.entity.User">
+    SELECT *
+    FROM tbl_user
+    WHERE department_id = #{departmentId}
+  </select>
+
+</mapper>
