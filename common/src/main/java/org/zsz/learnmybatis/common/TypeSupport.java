@@ -1,4 +1,4 @@
-package com.ximalaya.eywa.common.spport;
+package org.zsz.learnmybatis.common;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;

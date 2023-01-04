@@ -2,16 +2,13 @@ package org.zsz.learnmybatis.common;
 
 import com.google.common.base.Preconditions;
 import java.util.Collection;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.apache.commons.collections4.CollectionUtils;
@@ -78,20 +75,6 @@ public final class OptionalCollection<T> {
     return CollectionUtils.isEmpty(value) ? empty() : of(value);
   }
 
-  public static <T, R> List<R> convertList(Collection<T> value, Function<T, R> convert) {
-    return OptionalCollection.ofNullable(value)
-        .stream()
-        .map(convert)
-        .collect(Collectors.toList());
-  }
-
-  public static <T, R> Set<R> convertSet(Collection<T> value, Function<T, R> convert) {
-    return OptionalCollection.ofNullable(value)
-        .stream()
-        .map(convert)
-        .collect(Collectors.toSet());
-  }
-
   /**
    * If a value is present in this {@code OptionalCollection}, returns the value, otherwise throws {@code NoSuchElementException}.
    *
@@ -156,8 +139,8 @@ public final class OptionalCollection<T> {
    * @return the present value
    * @throws X                    if there is no value present
    * @throws NullPointerException if no value is present and {@code exceptionSupplier} is null
-   * @apiNote A method reference to the exception constructor with an empty argument list can be used as the supplier. For example, {@code
-   * IllegalStateException::new}
+   * @apiNote A method reference to the exception constructor with an empty argument list can be used as the supplier. For example,
+   * {@code IllegalStateException::new}
    */
   public <X extends Throwable> Collection<T> orElseThrow(Supplier<X> exceptionSupplier) throws X {
     if (isPresent) {
@@ -177,8 +160,8 @@ public final class OptionalCollection<T> {
    * otherwise an empty {@code Optional}
    * @throws NullPointerException if the mapping function is null
    * @apiNote This method supports post-processing on optional values, without the need to explicitly check for a return status.  For example, the
-   * following code traverses a stream of file names, selects one that has not yet been processed, and then opens that file, returning an {@code
-   * Optional<FileInputStream>}:
+   * following code traverses a stream of file names, selects one that has not yet been processed, and then opens that file, returning an
+   * {@code Optional<FileInputStream>}:
    *
    * <pre>{@code
    *     Optional<FileInputStream> fis =
@@ -233,7 +216,7 @@ public final class OptionalCollection<T> {
       return false;
     }
 
-    OptionalCollection<T> other = (OptionalCollection<T>) obj;
+    OptionalCollection<T> other = TypeSupport.unsafeCast(obj);
     return (isPresent && other.isPresent)
         ? CollectionUtils.isEqualCollection(value, other.value)
         : isPresent == other.isPresent;
